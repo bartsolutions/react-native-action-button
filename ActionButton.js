@@ -123,6 +123,10 @@ const ActionButton = props => {
           }
         : { marginHorizontal: props.offsetX, zIndex: props.zIndex };
 
+
+    if(props.getReset)
+      props.getReset(reset);
+
     return (
       <View
         style={[
