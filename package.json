@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/mastermoo/react-native-action-button",
   "dependencies": {
+    "deprecated-react-native-prop-types": "^5.0.0",
     "prop-types": "^15.5.10"
   }
 }
