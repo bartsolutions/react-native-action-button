@@ -15,13 +15,48 @@ import {
   getTouchableComponent,
   isAndroid,
   touchableBackground,
+  withDefaults,
   DEFAULT_ACTIVE_OPACITY
 } from "./shared";
 
-const ActionButton = props => {
+
+const defaultProps = {
+  resetToken: null,
+  active: false,
+  bgColor: "transparent",
+  bgOpacity: 1,
+  buttonColor: "rgba(0,0,0,1)",
+  buttonTextStyle: {},
+  buttonText: "+",
+  spacing: 20,
+  outRangeScale: 1,
+  autoInactive: true,
+  onPress: () => {},
+  onPressIn: () => {},
+  onPressOn: () => {},
+  backdrop: false,
+  degrees: 45,
+  position: "right",
+  offsetX: 30,
+  offsetY: 30,
+  size: 56,
+  verticalOrientation: "up",
+  backgroundTappable: false,
+  useNativeFeedback: true,
+  activeOpacity: DEFAULT_ACTIVE_OPACITY,
+  fixNativeFeedbackRadius: false,
+  nativeFeedbackRippleColor: "rgba(255,255,255,0.75)",
+  testID: undefined,
+  accessibilityLabel: undefined,
+  accessible: undefined
+};
+
+
+const ActionButton = buttonProps => {
+  const props = {...defaultProps, ...buttonProps}
+
   const [, setResetToken] = useState(props.resetToken);
   const [active, setActive] = useState(props.active);
-  const useNativeDriver = props.useNativeDriver || false;
   const anim = useRef(new Animated.Value(props.active ? 1 : 0));
   const timeout = useRef(null);
   const mounted = useRef(false);
@@ -37,13 +72,13 @@ const ActionButton = props => {
 
   useEffect(() => {
     if (props.active) {
-      Animated.spring(anim.current, { toValue: 1, useNativeDriver }).start();
+      Animated.spring(anim.current, { toValue: 1 , useNativeDriver: true}).start();
       setActive(true);
       setResetToken(props.resetToken);
     } else {
       props.onReset && props.onReset();
 
-      Animated.spring(anim.current, { toValue: 0, useNativeDriver }).start();
+      Animated.spring(anim.current, { toValue: 0 , useNativeDriver: true}).start();
       timeout.current = setTimeout(() => {
         setActive(false);
         setResetToken(props.resetToken);
@@ -124,10 +159,6 @@ const ActionButton = props => {
             width: props.size
           }
         : { marginHorizontal: props.offsetX, zIndex: props.zIndex };
-
-
-    if(props.getReset)
-      props.getReset(reset);
 
     return (
       <View
@@ -260,7 +291,7 @@ const ActionButton = props => {
     if (active) return reset(animate);
 
     if (animate) {
-      Animated.spring(anim.current, { toValue: 1, useNativeDriver }).start();
+      Animated.spring(anim.current, { toValue: 1 , useNativeDriver: true}).start();
     } else {
       anim.current.setValue(1);
     }
@@ -272,7 +303,7 @@ const ActionButton = props => {
     if (props.onReset) props.onReset();
 
     if (animate) {
-      Animated.spring(anim.current, { toValue: 0, useNativeDriver }).start();
+      Animated.spring(anim.current, { toValue: 0 , useNativeDriver: true}).start();
     } else {
       anim.current.setValue(0);
     }
@@ -319,7 +350,7 @@ const ActionButton = props => {
   );
 };
 
-ActionButton.Item = ActionButtonItem;
+ActionButton.Item = ActionButtonItem
 
 ActionButton.propTypes = {
   resetToken: PropTypes.any,
@@ -367,37 +398,6 @@ ActionButton.propTypes = {
   accessible: PropTypes.bool
 };
 
-ActionButton.defaultProps = {
-  resetToken: null,
-  active: false,
-  bgColor: "transparent",
-  bgOpacity: 1,
-  buttonColor: "rgba(0,0,0,1)",
-  buttonTextStyle: {},
-  buttonText: "+",
-  spacing: 20,
-  outRangeScale: 1,
-  autoInactive: true,
-  onPress: () => {},
-  onPressIn: () => {},
-  onPressOn: () => {},
-  backdrop: false,
-  degrees: 45,
-  position: "right",
-  offsetX: 30,
-  offsetY: 30,
-  size: 56,
-  verticalOrientation: "up",
-  backgroundTappable: false,
-  useNativeFeedback: true,
-  activeOpacity: DEFAULT_ACTIVE_OPACITY,
-  fixNativeFeedbackRadius: false,
-  nativeFeedbackRippleColor: "rgba(255,255,255,0.75)",
-  testID: undefined,
-  accessibilityLabel: undefined,
-  accessible: undefined
-};
-
 const styles = StyleSheet.create({
   overlay: {
     position: "absolute",
@@ -413,4 +413,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   }
 });
+
+
 export default ActionButton;

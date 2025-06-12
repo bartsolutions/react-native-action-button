@@ -15,6 +15,7 @@ import {
   getTouchableComponent,
   isAndroid,
   touchableBackground,
+  withDefaults,
   DEFAULT_ACTIVE_OPACITY
 } from "./shared";
 
@@ -26,19 +27,18 @@ const TextTouchable = isAndroid
   ? TouchableNativeFeedback
   : TouchableWithoutFeedback;
 
-export default class ActionButtonItem extends Component {
-  static get defaultProps() {
-    return {
-      active: true,
-      spaceBetween: 15,
-      useNativeFeedback: true,
-      activeOpacity: DEFAULT_ACTIVE_OPACITY,
-      fixNativeFeedbackRadius: false,
-      nativeFeedbackRippleColor: "rgba(255,255,255,0.75)",
-      numberOfLines: 1,
-    };
-  }
+const defaultProps = {
+  active: true,
+  spaceBetween: 15,
+  useNativeFeedback: true,
+  activeOpacity: DEFAULT_ACTIVE_OPACITY,
+  fixNativeFeedbackRadius: false,
+  nativeFeedbackRippleColor: "rgba(255,255,255,0.75)",
+  numberOfLines: 1,
+};
 
+
+class ActionButtonItem extends Component {
   static get propTypes() {
     return {
       active: PropTypes.bool,
@@ -215,3 +215,6 @@ const styles = StyleSheet.create({
     color: "#444"
   }
 });
+
+
+export default withDefaults(ActionButtonItem, defaultProps)
